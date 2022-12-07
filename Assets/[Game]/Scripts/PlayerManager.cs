@@ -15,9 +15,11 @@ public class PlayerManager : MonoBehaviour
     private float camVelocityY;
     private Camera mainCamera;
     public Transform path; 
-    public Rigidbody rb;
-    public Collider coll;
-
+    private Rigidbody rb;
+    private Collider coll;
+    private Renderer ballRenderer;
+    public ParticleSystem collideParticle;
+    
 
     void Start()
     {
@@ -25,6 +27,7 @@ public class PlayerManager : MonoBehaviour
         mainCamera = Camera.main;
         rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
+        ballRenderer = GetComponent<Renderer>();
     }
 
     void Update()
@@ -88,6 +91,34 @@ public class PlayerManager : MonoBehaviour
         {
             gameObject.SetActive(false);
             MenuManager.MenuManagerInstance.GameState = false;
+        }
+
+        switch (other.tag)
+        {
+            case "red":
+            other.gameObject.SetActive(false);
+            ballRenderer.material = other.GetComponent<Renderer>().material;
+            var NewParticleRed = Instantiate(collideParticle, transform.position, Quaternion.identity);
+            NewParticleRed.GetComponent<Renderer>().material = other.GetComponent<Renderer>().material;
+            break;
+            case "green":
+            other.gameObject.SetActive(false);
+            ballRenderer.material = other.GetComponent<Renderer>().material;
+            var NewParticleGreen = Instantiate(collideParticle, transform.position, Quaternion.identity);
+            NewParticleGreen.GetComponent<Renderer>().material = other.GetComponent<Renderer>().material;
+            break;
+            case "blue":
+            other.gameObject.SetActive(false);
+            ballRenderer.material = other.GetComponent<Renderer>().material;
+            var NewParticleBlue = Instantiate(collideParticle, transform.position, Quaternion.identity);
+            NewParticleBlue.GetComponent<Renderer>().material = other.GetComponent<Renderer>().material;
+            break;
+            case "yellow":
+            other.gameObject.SetActive(false);
+            ballRenderer.material = other.GetComponent<Renderer>().material;
+            var NewParticleYellow = Instantiate(collideParticle, transform.position, Quaternion.identity);
+            NewParticleYellow.GetComponent<Renderer>().material = other.GetComponent<Renderer>().material;
+            break;
         }
     }
     void OnTriggerExit(Collider other)
