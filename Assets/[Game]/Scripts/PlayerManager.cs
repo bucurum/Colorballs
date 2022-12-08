@@ -33,6 +33,7 @@ public class PlayerManager : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
         ballRenderer = ball.GetChild(1).GetComponent<Renderer>();
+        
     }
 
     void Update()
@@ -137,6 +138,12 @@ public class PlayerManager : MonoBehaviour
             var ballTrailColorYellow = this.ballTrail.trails;
             ballTrailColorYellow.colorOverLifetime = other.GetComponent<Renderer>().material.color;
             break;
+        }
+
+        if (other.gameObject.name.Contains("ColorBall"))
+        {
+            PlayerPrefs.SetInt("score", PlayerPrefs.GetInt("score") + 1);
+            MenuManager.MenuManagerInstance.menuElement[1].GetComponent<UnityEngine.UI.Text>().text = PlayerPrefs.GetInt("score").ToString();
         }
     }
     void OnTriggerExit(Collider other)
