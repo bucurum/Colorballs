@@ -3,11 +3,11 @@ using UnityEngine;
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager MenuManagerInstance;
-    public bool GameState;
+    public bool isGameActive;
     public GameObject menuElement;
     void Start()
     {
-        GameState = false;
+        isGameActive = false;
         MenuManagerInstance = this;
     }
 
@@ -18,7 +18,8 @@ public class MenuManager : MonoBehaviour
 
     public void StartTheGame()
     {
-        GameState = true;   
+        isGameActive = true;   
         menuElement.SetActive(false);
+        GameObject.FindWithTag("particle").GetComponent<ParticleSystem>().Play();
     }
 }

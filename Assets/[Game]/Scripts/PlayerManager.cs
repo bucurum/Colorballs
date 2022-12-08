@@ -19,6 +19,8 @@ public class PlayerManager : MonoBehaviour
     private Collider coll;
     private Renderer ballRenderer;
     public ParticleSystem collideParticle;
+    public ParticleSystem airEffect;
+    public ParticleSystem dustEffect;
     
 
     void Start()
@@ -32,7 +34,7 @@ public class PlayerManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && MenuManager.MenuManagerInstance.GameState)
+        if (Input.GetMouseButtonDown(0) && MenuManager.MenuManagerInstance.isGameActive)
         {
             moveTheBall = true;
 
@@ -66,7 +68,7 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
-        if (MenuManager.MenuManagerInstance.GameState)
+        if (MenuManager.MenuManagerInstance.isGameActive)
         {
             var pathNewPos = path.position;
             path.position = new Vector3(pathNewPos.x, pathNewPos.y, Mathf.MoveTowards(pathNewPos.z, -1000f, pathSpeed * Time.deltaTime));
@@ -90,7 +92,7 @@ public class PlayerManager : MonoBehaviour
         if (other.CompareTag("obstacle"))
         {
             gameObject.SetActive(false);
-            MenuManager.MenuManagerInstance.GameState = false;
+            MenuManager.MenuManagerInstance.isGameActive = false;
         }
 
         switch (other.tag)
@@ -130,6 +132,8 @@ public class PlayerManager : MonoBehaviour
             rb.velocity = new Vector3(0f, 8f, 0f);
             pathSpeed = pathSpeed *2 ;
 
+            var airEffectMain = airEffect.main;
+            airEffectMain.simulationSpeed = 10f;
         }
     }
     void OnCollisionEnter(Collision other)
@@ -139,6 +143,13 @@ public class PlayerManager : MonoBehaviour
             rb.isKinematic = true;
             coll.isTrigger = true;
             pathSpeed = pathSpeed / 2;
+
+            var airEffectMain = airEffect.main;
+            airEffectMain.simulationSpeed = 4f;
+
+            dustEffect.transform.position = other.contacts[0].point + new Vector3(0f, 0.3f, 0f);
+            dustEffect.GetComponent<Renderer>().material = ballRenderer.material;
+            dustEffect.Play();
         }
     }
 }
