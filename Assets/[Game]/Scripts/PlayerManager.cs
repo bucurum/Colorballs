@@ -21,15 +21,18 @@ public class PlayerManager : MonoBehaviour
     public ParticleSystem collideParticle;
     public ParticleSystem airEffect;
     public ParticleSystem dustEffect;
+    public ParticleSystem ballTrail;
+    public Material[] ballMaterials = new Material[2];
     
 
     void Start()
     {
         ball = transform;
+        ballTrail.Play();
         mainCamera = Camera.main;
         rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
-        ballRenderer = GetComponent<Renderer>();
+        ballRenderer = ball.GetChild(1).GetComponent<Renderer>();
     }
 
     void Update()
@@ -72,6 +75,8 @@ public class PlayerManager : MonoBehaviour
         {
             var pathNewPos = path.position;
             path.position = new Vector3(pathNewPos.x, pathNewPos.y, Mathf.MoveTowards(pathNewPos.z, -1000f, pathSpeed * Time.deltaTime));
+
+            ball.GetChild(1).Rotate(Vector3.right * 700f * Time.deltaTime);
         }
 
     }
@@ -99,27 +104,38 @@ public class PlayerManager : MonoBehaviour
         {
             case "red":
             other.gameObject.SetActive(false);
-            ballRenderer.material = other.GetComponent<Renderer>().material;
+            ballMaterials[1] = other.GetComponent<Renderer>().material;
+            ballRenderer.material = ballMaterials[1];
             var NewParticleRed = Instantiate(collideParticle, transform.position, Quaternion.identity);
             NewParticleRed.GetComponent<Renderer>().material = other.GetComponent<Renderer>().material;
+            var ballTrailColorRed = this.ballTrail.trails;
+            ballTrailColorRed.colorOverLifetime = other.GetComponent<Renderer>().material.color;
             break;
             case "green":
             other.gameObject.SetActive(false);
-            ballRenderer.material = other.GetComponent<Renderer>().material;
+            ballMaterials[1] = other.GetComponent<Renderer>().material;
+            ballRenderer.material = ballMaterials[1];
             var NewParticleGreen = Instantiate(collideParticle, transform.position, Quaternion.identity);
             NewParticleGreen.GetComponent<Renderer>().material = other.GetComponent<Renderer>().material;
+            var ballTrailColorGreen = this.ballTrail.trails;
+            ballTrailColorGreen.colorOverLifetime = other.GetComponent<Renderer>().material.color;
             break;
             case "blue":
             other.gameObject.SetActive(false);
-            ballRenderer.material = other.GetComponent<Renderer>().material;
+            ballMaterials[1] = other.GetComponent<Renderer>().material;
+            ballRenderer.material = ballMaterials[1];
             var NewParticleBlue = Instantiate(collideParticle, transform.position, Quaternion.identity);
-            NewParticleBlue.GetComponent<Renderer>().material = other.GetComponent<Renderer>().material;
+            var ballTrailColorBlue = this.ballTrail.trails;
+            ballTrailColorBlue.colorOverLifetime = other.GetComponent<Renderer>().material.color;
             break;
             case "yellow":
             other.gameObject.SetActive(false);
-            ballRenderer.material = other.GetComponent<Renderer>().material;
+            ballMaterials[1] = other.GetComponent<Renderer>().material;
+            ballRenderer.material = ballMaterials[1];
             var NewParticleYellow = Instantiate(collideParticle, transform.position, Quaternion.identity);
             NewParticleYellow.GetComponent<Renderer>().material = other.GetComponent<Renderer>().material;
+            var ballTrailColorYellow = this.ballTrail.trails;
+            ballTrailColorYellow.colorOverLifetime = other.GetComponent<Renderer>().material.color;
             break;
         }
     }
@@ -134,6 +150,7 @@ public class PlayerManager : MonoBehaviour
 
             var airEffectMain = airEffect.main;
             airEffectMain.simulationSpeed = 10f;
+            ballTrail.Stop();
         }
     }
     void OnCollisionEnter(Collision other)
@@ -150,6 +167,7 @@ public class PlayerManager : MonoBehaviour
             dustEffect.transform.position = other.contacts[0].point + new Vector3(0f, 0.3f, 0f);
             dustEffect.GetComponent<Renderer>().material = ballRenderer.material;
             dustEffect.Play();
+            ballTrail.Play();
         }
     }
 }
