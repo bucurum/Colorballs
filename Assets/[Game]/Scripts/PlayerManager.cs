@@ -33,6 +33,7 @@ public class PlayerManager : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
         ballRenderer = ball.GetChild(1).GetComponent<Renderer>();
+        PlayerPrefs.SetInt("score", 0);
         
     }
 
@@ -99,6 +100,9 @@ public class PlayerManager : MonoBehaviour
         {
             gameObject.SetActive(false);
             MenuManager.MenuManagerInstance.isGameActive = false;
+            MenuManager.MenuManagerInstance.menuElement[2].SetActive(true);
+            MenuManager.MenuManagerInstance.menuElement[2].transform.GetChild(0).GetComponent<UnityEngine.UI.Text>().text = "Game Over";
+            MenuManager.MenuManagerInstance.menuElement[2].transform.GetChild(2).GetComponent<UnityEngine.UI.Text>().text = PlayerPrefs.GetInt("score").ToString();
         }
 
         switch (other.tag)
@@ -143,7 +147,8 @@ public class PlayerManager : MonoBehaviour
         if (other.gameObject.name.Contains("ColorBall"))
         {
             PlayerPrefs.SetInt("score", PlayerPrefs.GetInt("score") + 1);
-            MenuManager.MenuManagerInstance.menuElement[1].GetComponent<UnityEngine.UI.Text>().text = PlayerPrefs.GetInt("score").ToString();
+            MenuManager.MenuManagerInstance.menuElement[1].GetComponent<UnityEngine.UI.Text>().text = PlayerPrefs.GetInt("score")
+            .ToString();
         }
     }
     void OnTriggerExit(Collider other)

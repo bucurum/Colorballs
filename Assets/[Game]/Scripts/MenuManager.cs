@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
@@ -21,5 +22,9 @@ public class MenuManager : MonoBehaviour
         isGameActive = true;   
         menuElement[0].SetActive(false);
         GameObject.FindWithTag("particle").GetComponent<ParticleSystem>().Play();
+    }
+    public void Retry()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
