@@ -6,15 +6,10 @@ public class MenuManager : MonoBehaviour
     public static MenuManager MenuManagerInstance;
     public bool isGameActive;
     public GameObject[] menuElement = new GameObject[2];
-    void Start()
+    void Start() //wait for tap the screen to start the game
     {
         isGameActive = false;
         MenuManagerInstance = this;
-    }
-
-    void Update()
-    {
-        
     }
 
     public void StartTheGame()

@@ -33,7 +33,7 @@ public class PlayerManager : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
         ballRenderer = ball.GetChild(1).GetComponent<Renderer>();
-        PlayerPrefs.SetInt("score", 0);
+        PlayerPrefs.SetInt("score", 0); //every time game starts set the score to 0
         
     }
 
@@ -104,7 +104,7 @@ public class PlayerManager : MonoBehaviour
             MenuManager.MenuManagerInstance.menuElement[2].transform.GetChild(0).GetComponent<UnityEngine.UI.Text>().text = "Game Over";
             MenuManager.MenuManagerInstance.menuElement[2].transform.GetChild(2).GetComponent<UnityEngine.UI.Text>().text = PlayerPrefs.GetInt("score").ToString();
         }
-
+        //when player ball collide with other ball, player`s and player`s trail color will be change that which ball`s color hitted
         switch (other.tag)
         {
             case "red":
@@ -143,7 +143,7 @@ public class PlayerManager : MonoBehaviour
             ballTrailColorYellow.colorOverLifetime = other.GetComponent<Renderer>().material.color;
             break;
         }
-
+        // when player ball collide with other ball increase the score 1 and display the score.
         if (other.gameObject.name.Contains("ColorBall"))
         {
             PlayerPrefs.SetInt("score", PlayerPrefs.GetInt("score") + 1);
@@ -151,7 +151,7 @@ public class PlayerManager : MonoBehaviour
             .ToString();
         }
     }
-    void OnTriggerExit(Collider other)
+    void OnTriggerExit(Collider other) //when the player finished a plane it will jump and play an animations and change the variables
     {
         if (other.CompareTag("path"))
         {
@@ -165,7 +165,7 @@ public class PlayerManager : MonoBehaviour
             ballTrail.Stop();
         }
     }
-    void OnCollisionEnter(Collision other)
+    void OnCollisionEnter(Collision other) // when the player land a plane set variables to normal
     {
         if (other.collider.CompareTag("path"))
         {
